@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-sm-6 com-sm-offset-3">
+<h1>Register</h1>
+ <form method="POST" class="form-signin app-cam"  action="">{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" class="btn btn-default" value="Register" />
+<a href="{% url 'post_list' %}" class="btn btn-default">Cancel</a>
+</form>
+</div>
+
+{% endblock %}
