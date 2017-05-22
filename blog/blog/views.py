@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.utils import timezone
 from django.contrib.auth import login,logout,get_user_model,authenticate
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 
 from .forms import SignUpForm,UserLoginForm,PostForm
 from .models import Post
@@ -35,7 +36,13 @@ def post_new(request):
 #to edit the existing post
 @login_required
 def post_edit(request,pk):
-    post = get_object_or_404(Post,pk=pk)
+    if pk:
+        post = get_object_or_404(Post,pk=pk)
+        if post.author != request.user:
+            return HttpResponseForbidden()
+    else:
+        post = Post(author=request.user)
+
     if request.method == "POST":
         form = PostForm(request.POST,instance=post)
         if form.is_valid():
