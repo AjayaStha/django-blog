@@ -59,8 +59,10 @@ def post_edit(request,pk):
 @login_required
 def post_remove(request,pk):
     post = get_object_or_404(Post, pk=pk)
-    post.delete()
-    return redirect('post_list')
+    if request.method == "POST":
+        post.delete()
+        return redirect('post_list')
+    return render(request,'post_delete.html',{'post':post})
 
 def login_view(request):
     form = UserLoginForm(request.POST or None)
